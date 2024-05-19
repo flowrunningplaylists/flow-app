@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./Home";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import Playlists from "./Playlists";
+import Playlist from "./Playlist";
 import Settings from "./Settings";
 // import { CurvedBottomBarExpo } from 'react-native-curved-bottom-bar';
 
@@ -10,10 +10,10 @@ const Tab = createBottomTabNavigator();
 export default function RootLayout() {
   return (
     <Tab.Navigator
-    screenOptions={{
-      tabBarShowLabel: false,
-      tabBarActiveTintColor: "#29ccd9"
-    }}
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: "#29ccd9",
+      }}
     >
       <Tab.Screen
         name="Home"
@@ -22,12 +22,12 @@ export default function RootLayout() {
           tabBarIcon: ({ color, size }) => (
             <TabBarIcon name="home" color={color} size={size} />
           ),
-          headerShown: false
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        name="Playlists"
-        component={Playlists}
+        name="Playlist"
+        component={Playlist}
         options={{
           tabBarIcon: ({ color, size }) => (
             <TabBarIcon name="music" color={color} size={size} />

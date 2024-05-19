@@ -31,9 +31,6 @@ export default function Home() {
       );
     } catch {
       setIsLoadingRecents(false);
-      // backup data in case the api isn't working for whatever reason :skull:
-      // prettier-ignore
-      setRecents([{average_cadence:85.4,date:new Date("2024-05-17T00:58:38Z"),distance:1742.6,duration:559,name:"CIF Indoor Running",},{average_cadence:75.0,date:new Date("2024-05-16T23:05:29Z"),distance:2378.6,duration:890,name:"Waterloo and University of Waterloo/Waterloo",},{average_cadence:86.6,date:new Date("2024-05-05T12:50:18Z"),distance:21330.5,duration:7380,name:"Toronto Half Marathon!!!",},{average_cadence:79.7,date:new Date("2024-04-29T13:53:43Z"),distance:9809.2,duration:3446,name:"Morning Run",},]);
     }
   }
 
