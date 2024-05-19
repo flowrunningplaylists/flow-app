@@ -55,7 +55,7 @@ export default function Playlist() {
 
   async function getSongs() {
     try {
-      const res = await fetch("https://hawkhacks2024.onrender.com/playlists");
+      const res = await fetch("https://hawkhacks2024.onrender.com/playlist");
       const json = await res.json();
       setIsLoading(false);
       setSongs(Object.keys(json).map((key) => json[key]));
