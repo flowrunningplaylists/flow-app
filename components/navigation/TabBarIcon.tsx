@@ -5,5 +5,5 @@ import { type IconProps } from '@expo/vector-icons/build/createIconSet';
 import { type ComponentProps } from 'react';
 
 export function TabBarIcon({ style, ...rest }: IconProps<ComponentProps<typeof Feather>['name']>) {
-  return <Feather size={28} style={[{ marginBottom: -3 }, style]} {...rest} />;
+  return <Feather size={28} style={[{ paddingTop: 0, marginTop: -22 }, style]} {...rest} />;
 }

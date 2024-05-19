@@ -9,7 +9,7 @@ export default function Settings() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>Nothing here yet :)</Text>
     </View>
   );
 }
