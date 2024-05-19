@@ -29,7 +29,7 @@ function RoundButton({
   style: StyleProp<ViewStyle>;
 }) {
   return (
-    <Pressable onPress={onPressed} style={style} android_ripple={{}}>
+    <Pressable onPress={onPressed} style={style}>
       <View
         style={{
           backgroundColor: "#09acbd",
@@ -84,72 +84,85 @@ export default function Playlist() {
         }}
       >
         <ScrollView>
-          {songs.map((song, i) => {
-            return (
-              <View
-                style={{
-                  width: "100%",
-                  flexDirection: "row",
-                  padding: 12,
-                  paddingBottom: 4,
-                }}
-                key={i}
-              >
-                <Image
-                  source={{ uri: song.image[song.image.length - 1] }}
-                  height={48}
-                  width={48}
+          {isLoading ? (
+            <Text
+              style={{
+                width: "100%",
+                textAlign: "center",
+                alignSelf: "center",
+                marginTop: 360,
+              }}
+            >
+              Generating your personalized playlist...
+            </Text>
+          ) : (
+            songs.map((song, i) => {
+              return (
+                <View
                   style={{
-                    marginRight: 12,
-                    borderRadius: 8,
+                    width: "100%",
+                    flexDirection: "row",
+                    padding: 12,
+                    paddingBottom: 4,
                   }}
-                />
-                <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: "row", marginBottom: 2 }}>
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 16,
-                      }}
-                    >
-                      {song.name.length > 34
-                        ? song.name.slice(0, 34) + "..."
-                        : song.name}
-                    </Text>
-                    <View style={{ flex: 1 }}></View>
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 16,
-                        color: "#28919c",
-                      }}
-                    >
-                      {(function (d) {
-                        const seconds = d % 60;
-                        const minutes = Math.floor((d % 3600) / 60);
-                        return `${minutes}:${Math.floor(seconds)
-                          .toString()
-                          .padStart(2, "0")}`;
-                      })(song.length)}
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: "row" }}>
-                    <Text style={{ fontWeight: "normal" }}>
-                      {song.artist.join(", ")}
-                    </Text>
-                    <View style={{ flex: 1 }}></View>
-                    <Text style={{ fontWeight: "normal" }}>
-                      {Math.round(song.bpm * 10) / 10}{" "}
-                      {song.bpm != song.running_bpm
-                        ? `(${Math.round(song.running_bpm * 10) / 10}) `
-                        : ""}
-                      BPM
-                    </Text>
+                  key={i}
+                >
+                  <Image
+                    source={{ uri: song.image[song.image.length - 1] }}
+                    height={48}
+                    width={48}
+                    style={{
+                      marginRight: 12,
+                      borderRadius: 8,
+                    }}
+                  />
+                  <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: "row", marginBottom: 2 }}>
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: 16,
+                        }}
+                      >
+                        {song.name.length > 34
+                          ? song.name.slice(0, 34) + "..."
+                          : song.name}
+                      </Text>
+                      <View style={{ flex: 1 }}></View>
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: 16,
+                          color: "#28919c",
+                        }}
+                      >
+                        {(function (d) {
+                          const seconds = d % 60;
+                          const minutes = Math.floor((d % 3600) / 60);
+                          return `${minutes}:${Math.floor(seconds)
+                            .toString()
+                            .padStart(2, "0")}`;
+                        })(song.length)}
+                      </Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "normal" }}>
+                        {song.artist.join(", ")}
+                      </Text>
+                      <View style={{ flex: 1 }}></View>
+                      <Text style={{ fontWeight: "normal" }}>
+                        {Math.round(song.bpm * 10) / 10}{" "}
+                        {song.bpm != song.running_bpm
+                          ? `(${Math.round(song.running_bpm * 10) / 10}) `
+                          : ""}
+                        BPM
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })
+          )}
         </ScrollView>
       </View>
       <View
@@ -166,12 +179,17 @@ export default function Playlist() {
       >
         <RoundButton
           title="Add to Queue"
-          onPressed={() => {}}
+          // no visual response on the ui anyway too lazy skull
+          onPressed={() =>
+            fetch("https://hawkhacks2024.onrender.com/queue_playlist")
+          }
           style={{ flex: 1, marginRight: 4 }}
         />
         <RoundButton
           title="Make Playlist"
-          onPressed={() => {}}
+          onPressed={() =>
+            fetch("https://hawkhacks2024.onrender.com/make_playlist")
+          }
           style={{ flex: 1, marginLeft: 4 }}
         />
       </View>
