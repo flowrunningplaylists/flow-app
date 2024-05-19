@@ -1,37 +1,48 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Home from "./Home";
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import Playlists from "./Playlists";
+import Settings from "./Settings";
+// import { CurvedBottomBarExpo } from 'react-native-curved-bottom-bar';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+const Tab = createBottomTabNavigator();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <Tab.Navigator
+    screenOptions={{
+      tabBarShowLabel: false,
+      tabBarActiveTintColor: "#29ccd9"
+    }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <TabBarIcon name="home" color={color} size={size} />
+          ),
+          headerShown: false
+        }}
+      />
+      <Tab.Screen
+        name="Playlists"
+        component={Playlists}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <TabBarIcon name="music" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <TabBarIcon name="settings" color={color} size={size} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 }
