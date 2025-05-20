@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { supabase } from "@/lib/supabase"; 
@@ -31,6 +31,7 @@ export default function RootLayout() {
     return <Auth />;
   }
 
+  // TODO: if the user is logged in, first check if the user's spotify and strava accounts are linked
   // If user is logged in, show bottom tab navigator
   return (
     <NavigationContainer>

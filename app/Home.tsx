@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { ImageBackground, StatusBar, Text, View } from "react-native";
+import { supabase } from "@/lib/supabase";
+import Constants from "expo-constants";
+import User from "@/models/User";
+
+const BASE_URL = Constants.expoConfig?.extra?.BASE_URL;
 
 type ActivityInfoRaw = {
   average_cadence: number;
@@ -18,9 +23,37 @@ type ActivityInfo = {
 };
 
 export default function Home() {
-  const [isLoadingRecents, setIsLoadingRecents] = useState(true);
+  const [isLoadingRecents, setIsLoadingRecents] = useState(true);  
   const [recents, setRecents] = useState<ActivityInfo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
+  async function getUserData() {
+    try {
+      const supabaseRes = await supabase.auth.getUser();
+      if (supabaseRes.error) {
+        setUser(null);
+        throw new Error(supabaseRes.error.message);
+      }
+
+      const res = await fetch(`${BASE_URL}/users/${supabaseRes.data.user!.email}`);
+      if (res.status !== 200) {
+        setUser(null);
+        throw new Error(res.statusText);
+      } 
+      const data = await res.json();
+      console.log("User data:", data);
+
+      setUser(User.fromJSON(data))
+      setIsLoading(false);
+    } catch (e) {
+      console.error("Unexpected error while fetching user data:", e);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  
   async function getRecents() {
     try {
       const res = await fetch("https://hawkhacks2024.onrender.com/recent");
@@ -35,11 +68,31 @@ export default function Home() {
   }
 
   useEffect(() => {
+    getUserData();
     getRecents();
     StatusBar.setBarStyle("dark-content");
   }, []);
 
-  return (
+  // TODO: we can remove this later, just for debugging
+  useEffect(() => {
+    if (user) {
+      console.log("User data:", user);
+    }
+  }, [user]);
+
+  // TODO: use StyleSheet to avoid inline styles
+  return isLoading ? (
+  <View
+    style={{
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "white",
+    }}
+  >
+    <Text style={{ fontSize: 18 }}>Loading...</Text>
+  </View>
+  ) : (
     <View
       style={{
         flexDirection: "column",
@@ -88,7 +141,7 @@ export default function Home() {
               fontSize: 36,
             }}
           >
-            Good afternoon, Fred!
+            Good afternoon, {user?.email || "loading"}!
           </Text>
           <Text
             style={{

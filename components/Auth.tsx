@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from '@rneui/themed'
+import Constants from 'expo-constants'
+
+const BASE_URL = Constants.expoConfig?.extra?.BASE_URL
 
 export default function Auth() {
   const [email, setEmail] = useState('')
@@ -27,8 +30,12 @@ export default function Auth() {
     } = await supabase.auth.signUp({
       email: email,
       password: password,
+      options: {
+        emailRedirectTo: `${BASE_URL}/welcome`,
+      }
     })
 
+    // I think this only works for mobile
     if (error) Alert.alert(error.message)
     if (!session) Alert.alert('Please check your inbox for email verification!')
     setLoading(false)
